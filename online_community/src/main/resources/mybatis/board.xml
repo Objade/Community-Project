@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC
+		"-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itbank.repository.BoardDAO">
+
+<select id="selectList" resultType="board">
+	select * from board2 
+		order by idx desc
+		offset #{offset} rows
+		fetch first #{perPage} rows only	
+</select>
+
+<select id="selectOne" resultType="board" parameterType="int">
+	select * from board2 where idx = ${idx}
+</select>
+
+<select id="getReply" parameterType="int" resultType="reply">
+	select * from (
+    	select * from reply2 where board_idx = #{idx} 
+	)
+		start with parent_idx = 0   
+		connect by prior idx = parent_idx
+		
+</select>
+
+<select id="selectSearch" resultType="board" parameterType="String">
+	select * from board2 where title like '%${search}%' order by idx desc
+</select>
+
+<insert id="insert" parameterType="board">
+	insert into board2 (writer, title, content, ipaddr, uploadFile) 
+		values (#{writer}, #{title}, #{content}, #{ipaddr}, #{uploadFile})
+</insert>
+
+<insert id="insert2" parameterType="board">
+	insert into board2 (writer, title, content, ipaddr) 
+		values (#{writer}, #{title}, #{content}, #{ipaddr})
+</insert>
+
+<insert id="add" parameterType="board">
+	insert into board2 (writer, title, content, ipaddr) 
+		values (#{writer}, #{title}, #{content}, #{ipaddr})
+</insert>
+
+<insert id="insertReply" parameterType="reply">
+	insert into reply2
+		(parent_idx, reply_depth, board_idx, writer, content)
+		values
+			(#{parent_idx}, #{reply_depth}, #{board_idx}, #{writer}, #{content})
+</insert>
+
+<update id="update" parameterType="board">
+	update board2 set title = #{title}, content = #{content}, uploadFile = #{uploadFile} where idx = ${idx}
+</update>
+
+<update id="update2" parameterType="board">
+	update board2 set title = #{title}, content = #{content} where idx = ${idx}
+</update>
+
+<update id="addView" parameterType="board">
+	update board2 set viewCount = viewCount + 1 where idx = ${idx}
+</update>
+
+<delete id="delete" parameterType="int">
+	delete board2 where idx = #{idx}
+</delete>
+
+<select id="selectBoardCount" resultType="int">
+	select count(*) from board2
+</select>
+
+<delete id="deleteReply" parameterType="int">
+	delete reply2 where idx = #{idx}
+</delete>
+
+
+</mapper>

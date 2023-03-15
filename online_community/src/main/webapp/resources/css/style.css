@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+table#boardList {
+	min-width: 800px;
+	margin: auto;
+}
+
+table#boardList tr > th, table#boardList tr > th {
+	width: 12%;
+}
+
+table#boardList tr > td:nth-child(4), 
+table#boardList tr > th:nth-child(4) {
+	width: 40%;
+}
+
+
+div.replyTop {
+	display: flex;
+	justify-content: space-between;
+	
+}
+
+div.reply pre.content {
+	background-color: #eee;
+	padding: 10px;
+	text-align: left;
+}
+
+div.reply div.left {
+	display: flex;
+	justify-content: space-around;
+}
+
+div.reply div.writer {
+	margin-right: 20px;
+}
+
+.replyWrite {
+	height: 50px;
+	
+}
+
